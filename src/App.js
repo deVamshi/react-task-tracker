@@ -1,23 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import AddTask from './components/AddTask';
+import Header from './components/Header'
+import Tasks from './components/Tasks'
+import React, {useState} from 'react';
+
+
+const tasks = [
+  {
+    "id": 1,
+    "name":"Learn React",
+    "remind": true
+  },
+  {
+    "id": 2,
+    "name":"Upload zeropay",
+    "remind": false
+  },
+  {
+    "id": 3,
+    "name":"Spend some free time",
+    "remind": true
+  },
+]
+
 
 function App() {
+
+  const [showAdd, setShowAdd] = useState(false)
+  const [allTasks, setAllTasks] = useState(tasks)
+
+
+  const toggleAdd = () => {
+    setShowAdd(
+      !showAdd
+    )
+  }
+
+  const handleAddTask = (task) => {
+    setAllTasks(
+      [task, ...allTasks]
+    )
+  }
+
+  const handleDeleteTask = (id) => {
+    const deletedTaskList = allTasks.filter((task) => task.id !== id);
+    setAllTasks(deletedTaskList);
+
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App container">
+      <Header toggleAdd={toggleAdd} />
+      {
+       showAdd && <AddTask addTask={handleAddTask} />
+      }
+      <Tasks tasks={allTasks} deleteTask={handleDeleteTask}/>
     </div>
   );
 }
